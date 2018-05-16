@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-portal',
+  selector: 'lib-portal-account-signup',
   template: `
-  <mat-toolbar class="portal-header" color="primary">
-
-  </mat-toolbar>
-  <router-outlet></router-outlet>
+  Sign up !
   `,
   styles: [`
   :host {
@@ -15,19 +12,15 @@ import { Component, OnInit } from '@angular/core';
     margin:0px;
     padding:0px;
     border: 0px;
-    align-items:stretch;
-    flex-direction: column;
   }
 
   `]
 })
-export class PortalComponent implements OnInit {
+export class AccountSignupComponent implements OnInit {
 
   constructor() { }
 
   ngOnInit() {
-
-
   }
 
 }
