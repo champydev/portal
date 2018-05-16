@@ -1,4 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PortalComponent } from './components/portal/portal.component';
 
 import { AccountSigninComponent } from './components/account/signin/account.signin.component';
@@ -7,21 +8,26 @@ import { AccountSignupComponent } from './components/account/signup/account.sign
 import { AccountForgotComponent } from './components/account/forgot/account.forgot.component';
 import { AccountActivateComponent } from './components/account/activate/account.activate.component';
 import { CardComponent } from './components/card/card.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatToolbarModule,
   MatIconModule,
-  MatCardModule
+  MatCardModule,
+  MatInputModule,
+  MatCheckboxModule,
+  MatButtonModule,
+  MatTooltipModule
 } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 import { PortalService } from './services/portal.service';
+import { PasswordService } from './services/password.service';
 
 const appRoutes: Routes = [
   { path: 'account/signin', component: AccountSigninComponent },
   { path: 'account/signout', component: AccountSignoutComponent },
   { path: 'account/forgot', component: AccountForgotComponent },
-  { path: 'account/signup', component: AccountSignupComponent},
-  { path: 'account/activate', component: AccountActivateComponent},
+  { path: 'account/signup', component: AccountSignupComponent },
+  { path: 'account/activate', component: AccountActivateComponent },
   {
     path: '',
     redirectTo: '/account/signin',
@@ -34,7 +40,13 @@ const appRoutes: Routes = [
   imports: [
     MatToolbarModule,
     MatCardModule,
+    MatInputModule,
+    MatCheckboxModule,
     MatIconModule,
+    CommonModule,
+    MatTooltipModule,
+    MatButtonModule,
+    ReactiveFormsModule,
     RouterModule.forChild(appRoutes)
   ],
   declarations: [
@@ -57,6 +69,6 @@ const appRoutes: Routes = [
     AccountActivateComponent,
     CardComponent
   ],
-  providers: [PortalService]
+  providers: [PortalService, PasswordService]
 })
-export class PortalModule {}
+export class PortalModule { }

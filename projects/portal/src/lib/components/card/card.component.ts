@@ -7,7 +7,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
   <mat-card class="inner-card">
   <mat-toolbar class="portal-header" color="primary">
-  {{title}}
+  <mat-icon *ngIf="icon != null">{{icon}}</mat-icon>
+  &nbsp;&nbsp;{{title}}&nbsp;
   </mat-toolbar>
 
   <mat-card-content>
@@ -44,11 +45,21 @@ import { Component, OnInit, Input } from '@angular/core';
   .card-content
   {
     flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .mat-card-content
+  {
+    flex:1 !important;
+    display: flex;
   }
   .inner-card
   {
     margin:0px;
     padding:0px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
 
   }
   `
@@ -58,6 +69,7 @@ export class CardComponent implements OnInit {
   @Input('cardWidth') cardWidth = 200;
   @Input('cardHeight') cardHeight = 200;
   @Input('title') title = 'Untiteled';
+  @Input('icon') icon = null;
   constructor() {}
 
   ngOnInit() {}

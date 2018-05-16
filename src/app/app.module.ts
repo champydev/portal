@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import {PortalModule} from 'portal';
 import {PortalComponent} from 'portal';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 const appRoutes: Routes = [];
 @NgModule({
@@ -16,6 +17,7 @@ const appRoutes: Routes = [];
     RouterModule.forRoot(appRoutes,{
       useHash:true
     }),
+    CommonModule,
     BrowserAnimationsModule,
   ],
   providers: [],
