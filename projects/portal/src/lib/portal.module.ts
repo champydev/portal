@@ -1,3 +1,4 @@
+import { FormErrorIconComponent } from './components/form/error/icon/form.error.icon.component';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalComponent } from './components/portal/portal.component';
@@ -8,6 +9,7 @@ import { AccountSignupComponent } from './components/account/signup/account.sign
 import { AccountForgotComponent } from './components/account/forgot/account.forgot.component';
 import { AccountActivateComponent } from './components/account/activate/account.activate.component';
 import { CardComponent } from './components/card/card.component';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatToolbarModule,
@@ -16,6 +18,7 @@ import {
   MatInputModule,
   MatCheckboxModule,
   MatButtonModule,
+  MatProgressSpinnerModule,
   MatTooltipModule
 } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
@@ -47,6 +50,7 @@ const appRoutes: Routes = [
     MatTooltipModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatProgressSpinnerModule,
     RouterModule.forChild(appRoutes)
   ],
   declarations: [
@@ -55,6 +59,7 @@ const appRoutes: Routes = [
     AccountSignoutComponent,
     AccountSignupComponent,
     AccountForgotComponent,
+    FormErrorIconComponent,
     AccountActivateComponent,
     CardComponent
   ],
@@ -66,6 +71,7 @@ const appRoutes: Routes = [
     AccountSignoutComponent,
     AccountSignupComponent,
     AccountForgotComponent,
+    FormErrorIconComponent,
     AccountActivateComponent,
     CardComponent
   ],
