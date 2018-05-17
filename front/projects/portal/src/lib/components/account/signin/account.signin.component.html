@@ -1,0 +1,108 @@
+
+
+<!--               Succès                        -->
+
+<div  style="display: flex;flex:1;flex-direction: column;align-items:stretch;" *ngIf="!error && !waiting && success">
+    <div  style="flex: 1;"></div>
+      <div >
+        <div class="spinner-container">
+          <div style="flex: 1;"></div>
+          <mat-icon style="font-size: 96px;height:100px;width:100px;text-align:center;vertical-alignement:middle;color:green;">done_all</mat-icon>
+          <div style="flex: 1;"></div>
+        </div>
+      </div>
+    
+    
+      <ul>
+        <li style="list-style-type: none;">
+        <div style="display: table;">
+          <mat-icon style="display: table-cell; vertical-align: middle; ">done</mat-icon>
+          <div style="display: table-cell; vertical-align: middle; ">&nbsp;Authentification réussi</div>
+       </div>
+        </li>
+    
+        <li style="list-style-type: none;">
+        <div style="display: table;">
+        <mat-icon style="display: table-cell; vertical-align: middle; ">done</mat-icon>
+        <div style="display: table-cell; vertical-align: middle; ">&nbsp;Redirection vers la page d'acceuil ...</div>
+     </div>
+        </li>
+      </ul>
+    
+    
+    
+    
+    
+      <div  style="flex: 1;"></div>
+    
+    
+      
+    
+    
+    </div>
+    
+    
+    <!--               Erreur                        -->
+    
+    <div  style="display: flex;flex:1;flex-direction: column;align-items:stretch;" *ngIf="error && !waiting && !success">
+    <div  style="flex: 1;"></div>
+      <div >
+        <div class="spinner-container">
+          <div style="flex: 1;"></div>
+          <mat-icon style="font-size: 96px;height:100px;width:100px;text-align:center;vertical-align:middle;color:red;">error</mat-icon>
+          <div style="flex: 1;"></div>
+        </div>
+      </div>
+    
+    
+    
+      <ul>
+      <li style="list-style-type: none;">
+      <div style="display: table;">
+        <mat-icon style="display: table-cell; vertical-align: middle; ">error_outline</mat-icon>
+        <div style="display: table-cell; vertical-align: middle; ">&nbsp;{{errorMessage}}</div>
+     </div>
+      </li>
+    
+    
+    </ul>
+    
+    
+    
+    
+      <div  style="flex: 1;"></div>
+    
+    
+      
+      <div class="link-container">
+        <a href="/#/account/signup">Créer un compte</a>
+        <div style="flex:1;"></div>
+        <a href="/#/account/signin" (click)="onConnectClick();">Se connecter</a>
+      </div>
+    
+    </div>
+    
+    
+    
+    <!--               Attente                        -->
+    <div  style="display: flex;flex:1;flex-direction: column;align-items:stretch;" *ngIf="waiting && !error  && !success">
+    <div  style="flex: 1;"></div>
+      <div >
+        <div class="spinner-container">
+          <div style="flex: 1;"></div>
+          <mat-spinner></mat-spinner>
+          <div style="flex: 1;"></div>
+        </div>
+      </div>
+    
+      <div style="margin:16px;text-align:center;display:flex;align-items:center;flex-direction:row;font-size:14px;">
+      <div  style="flex: 1;"></div>
+        <div style="display: table;">
+          <mat-icon style="display: table-cell; vertical-align: middle; ">compare_arrows</mat-icon>
+          <div style="display: table-cell; vertical-align: middle; ">&nbsp;Connexion en cours ...</div>
+       </div>
+       <div  style="flex: 1;"></div>
+      </div>
+      <div  style="flex: 1;"></div>
+    </div>
+    

@@ -9,8 +9,9 @@ import { AccountSignupComponent } from './components/account/signup/account.sign
 import { AccountForgotComponent } from './components/account/forgot/account.forgot.component';
 import { AccountActivateComponent } from './components/account/activate/account.activate.component';
 import { CardComponent } from './components/card/card.component';
-
+import {AsyncResultComponent} from './components/form/async/result/async.result.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import {
   MatToolbarModule,
   MatIconModule,
@@ -24,6 +25,7 @@ import {
 import { RouterModule, Routes } from '@angular/router';
 import { PortalService } from './services/portal.service';
 import { PasswordService } from './services/password.service';
+import {AccountService} from './services/account.service';
 
 const appRoutes: Routes = [
   { path: 'account/signin', component: AccountSigninComponent },
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
     MatButtonModule,
     ReactiveFormsModule,
     MatProgressSpinnerModule,
+    HttpClientModule,
     RouterModule.forChild(appRoutes)
   ],
   declarations: [
@@ -58,6 +61,7 @@ const appRoutes: Routes = [
     AccountSigninComponent,
     AccountSignoutComponent,
     AccountSignupComponent,
+    AsyncResultComponent,
     AccountForgotComponent,
     FormErrorIconComponent,
     AccountActivateComponent,
@@ -71,10 +75,11 @@ const appRoutes: Routes = [
     AccountSignoutComponent,
     AccountSignupComponent,
     AccountForgotComponent,
+    AsyncResultComponent,
     FormErrorIconComponent,
     AccountActivateComponent,
     CardComponent
   ],
-  providers: [PortalService, PasswordService]
+  providers: [PortalService, PasswordService,AccountService]
 })
 export class PortalModule { }

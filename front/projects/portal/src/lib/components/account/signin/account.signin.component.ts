@@ -1,54 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { PasswordService } from '../../../services/password.service';
+import { AccountService } from '../../../services/account.service';
 @Component({
   selector: 'lib-portal-account-signin',
   template: `
-<lib-portal-card [icon]="'perm_identity'" [title]="'Authentification'" [cardWidth]="400" [cardHeight]="300">
+<lib-portal-card [icon]="'perm_identity'" [title]="'Authentification'" [cardWidth]="400" [cardHeight]="350">
 
-<div  style="display: flex;flex:1;flex-direction: column;" *ngIf="error && !waiting">
-<div  style="display: flex;margin: 10px;align-items:center;">
+<lib-portal-form-async-result style="flex:1;"
+ [waitingMessage]="'Authentification en cours ...'" 
+ [errorMessages]="errorMessages"
+ [successMessages]="successMessages"
+ *ngIf="waiting || error || success" [waiting]="waiting"></lib-portal-form-async-result>
 
-    <div class="mat-error" style="margin-left:10px">
-      <mat-icon>error</mat-icon>
-    </div>
-
-    <div class="mat-error" style="margin-left:10px;flex:1;">
-     {{errorMessage}}
-    </div>
-
-  </div>
-  <div style="flex: 1;"></div>
-  <div class="link-container">
-    <a href="/#/account/signup">Créer un compte</a>
-    <div style="flex:1;"></div>
-    <a href="/#/account/signin" (click)="onConnectClick();">Se connecter</a>
-    </div>
-</div>
-
-<div  style="display: flex;flex:1;flex-direction: column;" *ngIf="waiting && !error">
-  <div  style="flex: 1;">
-    <div class="spinner-container">
-      <div style="flex: 1;"></div>
-      <mat-spinner></mat-spinner>
-      <div style="flex: 1;"></div>
-    </div>
-  </div>
-
-  <div style="display: flex;margin: 10px;align-items:center;">
-
-    <div style="margin-left:10px;">
-      <mat-icon>compare_arrows</mat-icon>
-    </div>
-
-    <div style="margin-left:10px;flex:1;">
-     Connexion en cours ...
-    </div>
-
-  </div>
-
-</div>
-<div *ngIf="!waiting && !error" class='input-container'>
+<!--               Formulaire                        -->
+<div *ngIf="!waiting && !error  && !success" class='input-container'>
   <form [formGroup]="signinForm" class="input-form">
 
   <!--        Champ Email        -->
@@ -123,7 +89,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
      flex-direction: row;
      align-items:center;
      flex:1;
-     margin-top:50px;
+     
   }
   .link-container
   {
@@ -146,27 +112,42 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AccountSigninComponent implements OnInit {
   waiting = false;
   error = false;
-  errorMessage = '';
+  success = false;
+  errorMessages = [];
+  successMessages = [];
   signinForm: FormGroup;
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private passwordService : PasswordService,private accountService : AccountService) {
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       remeberMe: [true, [Validators.required]]
     });
   }
-  onActionClick() {
+  async onActionClick() {
     this.error = false;
     this.waiting = true;
-    setTimeout(() => {
-      this.waiting = false;
-      this.error = true;
-      this.errorMessage ='Test erreur';
-    }, 3000);
+    setTimeout(async () => {
+      const hash = this.passwordService.hashPassword(this.signinForm.controls['password'].value);
+     const email = this.signinForm.controls['email'].value;
+     try{
+       await this.accountService.signin(email,hash);
+       this.waiting = false;
+       this.error = false;
+       this.success = true;
+       this.successMessages = ['Authentification réussi','Redirection vers la page d\'acceuil'];  
+     }
+     catch(e){
+        this.waiting = false;
+        this.error = true;
+        this.success = false;
+        this.errorMessages = [(<Error>e).message]; 
+     }
+  
+    //  this.errorMessage = 'Erreur on se sait pas quoi';
+    }, 1000);
   }
-  onConnectClick()
-  {
+  onConnectClick() {
     console.log('connect click');
   }
-  ngOnInit() {}
+  ngOnInit() { }
 }

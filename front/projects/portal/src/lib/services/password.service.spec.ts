@@ -2,7 +2,7 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { PasswordService } from './password.service';
 
-describe('PortalService', () => {
+describe('PasswordService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [PasswordService]
