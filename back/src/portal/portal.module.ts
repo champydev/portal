@@ -1,12 +1,16 @@
-import { Module } from '@nestjs/common';
+import { Module,Global } from '@nestjs/common';
 import { AccountController } from './controllers/account.controller';
-import { databaseProviders } from './providers/database.provider';
-import { userProviders } from './providers/user.provider';
+import { DatabaseService } from './services/database.service';
+import { UserService } from './services/user.service';
 import {AccountService} from './services/account.service';
-@Module({})
+import {MailService} from './services/mail.service';
+
+@Module({
+    providers: [DatabaseService,UserService,AccountService,MailService],
+    exports: [DatabaseService,UserService,AccountService,MailService],
+    controllers: [AccountController],
+})
 export class PortalModule {
-    providers: [databaseProviders,userProviders,AccountService];
-    exports: [databaseProviders,userProviders,AccountService];
-    controllers: [AccountController];
+   
  
 }

@@ -11,7 +11,8 @@ import { AccountActivateComponent } from './components/account/activate/account.
 import { CardComponent } from './components/card/card.component';
 import {AsyncResultComponent} from './components/form/async/result/async.result.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS  } from '@angular/common/http';
+import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {
   MatToolbarModule,
   MatIconModule,
@@ -26,19 +27,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { PortalService } from './services/portal.service';
 import { PasswordService } from './services/password.service';
 import {AccountService} from './services/account.service';
-
+import {JwtGuard } from './guards/jwt.guard';
 const appRoutes: Routes = [
   { path: 'account/signin', component: AccountSigninComponent },
-  { path: 'account/signout', component: AccountSignoutComponent },
+  { path: 'account/signout', component: AccountSignoutComponent,canActivate:[JwtGuard] },
   { path: 'account/forgot', component: AccountForgotComponent },
   { path: 'account/signup', component: AccountSignupComponent },
   { path: 'account/activate', component: AccountActivateComponent },
   {
     path: '',
-    redirectTo: '/account/signin',
+    redirectTo: '/home',
     pathMatch: 'full'
-  },
-  { path: '**', redirectTo: '/account/signin' }
+  }
+  
 ];
 
 @NgModule({
@@ -79,7 +80,8 @@ const appRoutes: Routes = [
     FormErrorIconComponent,
     AccountActivateComponent,
     CardComponent
+    
   ],
-  providers: [PortalService, PasswordService,AccountService]
+  providers: [JwtGuard,PortalService, PasswordService,AccountService,{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true } ]
 })
 export class PortalModule { }

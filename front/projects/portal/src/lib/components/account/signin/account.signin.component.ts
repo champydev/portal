@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PasswordService } from '../../../services/password.service';
 import { AccountService } from '../../../services/account.service';
@@ -29,7 +30,7 @@ import { AccountService } from '../../../services/account.service';
   <!--        Champ Password      -->
   <div class="field-container">
     <mat-form-field style="flex:1;">
-    <input matInput  formControlName="password" type="password" placeholder="Mot de passe" >
+    <input autocomplete="off" matInput  formControlName="password" type="password" placeholder="Mot de passe" >
     </mat-form-field>
     <lib-portal-form-error-icon [control]="signinForm.controls['password']"></lib-portal-form-error-icon>
   </div>
@@ -116,7 +117,7 @@ export class AccountSigninComponent implements OnInit {
   errorMessages = [];
   successMessages = [];
   signinForm: FormGroup;
-  constructor(private fb: FormBuilder,private passwordService : PasswordService,private accountService : AccountService) {
+  constructor(private router : Router, private fb: FormBuilder,private passwordService : PasswordService,private accountService : AccountService) {
     this.signinForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -127,24 +128,30 @@ export class AccountSigninComponent implements OnInit {
     this.error = false;
     this.waiting = true;
     setTimeout(async () => {
-      const hash = this.passwordService.hashPassword(this.signinForm.controls['password'].value);
-     const email = this.signinForm.controls['email'].value;
-     try{
-       await this.accountService.signin(email,hash);
-       this.waiting = false;
-       this.error = false;
-       this.success = true;
-       this.successMessages = ['Authentification réussi','Redirection vers la page d\'acceuil'];  
-     }
-     catch(e){
-        this.waiting = false;
-        this.error = true;
-        this.success = false;
-        this.errorMessages = [(<Error>e).message]; 
-     }
-  
-    //  this.errorMessage = 'Erreur on se sait pas quoi';
+      await this.signin();  
     }, 1000);
+  }
+  async signin()
+  {
+    const hash = this.passwordService.hashPassword(this.signinForm.controls['password'].value);
+    const email = this.signinForm.controls['email'].value;
+    try{
+      await this.accountService.signin(email,hash);
+      this.waiting = false;
+      this.error = false;
+      this.success = true;
+      this.successMessages = ['Authentification réussi','Redirection vers la page d\'acceuil'];  
+      setTimeout(() =>{
+       
+       this.router.navigate(['/home']);
+      },1000);
+   }
+    catch(e){
+       this.waiting = false;
+       this.error = true;
+       this.success = false;
+       this.errorMessages = [(<Error>e).message]; 
+    }
   }
   onConnectClick() {
     console.log('connect click');
