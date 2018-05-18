@@ -8,7 +8,7 @@ import {
 import { PasswordService } from '../../../services/password.service';
 import { PasswordCheckStrength } from './../../../enums/password.check.strength.enum';
 import { MatTooltip } from '@angular/material';
-import { nsend } from 'q';
+import { AccountService } from '../../../services/account.service';
 @Component({
   selector: 'lib-portal-account-signup',
   template: `
@@ -16,58 +16,24 @@ import { nsend } from 'q';
 
   <lib-portal-card [icon]="'perm_identity'" [title]="'Créer un compte'" [cardWidth]="500" [cardHeight]="500">
 
-<div  style="display: flex;flex:1;flex-direction: column;" *ngIf="error && !waiting">
-<div  style="display: flex;margin: 10px;align-items:center;">
-
-    <div class="mat-error" style="margin-left:10px">
-      <mat-icon>error</mat-icon>
-    </div>
-
-    <div class="mat-error" style="margin-left:10px;flex:1;">
-     {{errorMessage}}
-    </div>
-
-  </div>
-  <div style="flex: 1;"></div>
-  <div class="link-container">
-    <a href="/#/account/forgot">Mot de passe oublié</a>
-    <div style="flex:1;"></div>
-    <a href="/#/account/signin">Se connecter</a>
-    </div>
-</div>
-
-<div  style="display: flex;flex:1;flex-direction: column;" *ngIf="waiting && !error">
-  <div  style="flex: 1;">
-    <div class="spinner-container">
-      <div style="flex: 1;"></div>
-      <mat-spinner></mat-spinner>
-      <div style="flex: 1;"></div>
-    </div>
-  </div>
-
-  <div style="display: flex;margin: 10px;align-items:center;">
-    <div style="margin-left:10px;">
-      <mat-icon>compare_arrows</mat-icon>
-    </div>
-    <div style="margin-left:10px;flex:1;">
-     Création du compte en cours ...
-    </div>
-  </div>
-</div>
+  <lib-portal-form-async-result style="flex:1;"
+  [waitingMessage]="'Authentification en cours ...'" 
+  [errorMessages]="errorMessages"
+  [successMessages]="successMessages"
+  *ngIf="waiting || error || success" [waiting]="waiting"></lib-portal-form-async-result>
 
 
 
 
 
 
-
-<div *ngIf="!waiting && !error" class='input-container'>
+<div *ngIf="!waiting && !error && !success" class='input-container'>
   <form [formGroup]="signupForm" class="input-form">
 
   <!--        Champ Prénom        -->
   <div class="field-container">
     <mat-form-field style="flex:1;">
-      <input matInput formControlName="prenom" type="text" placeholder="Prénom">
+      <input autocomplete="off" matInput formControlName="prenom" type="text" placeholder="Prénom">
     </mat-form-field>
     <lib-portal-form-error-icon [control]="signupForm.controls['prenom']"></lib-portal-form-error-icon>
   </div>
@@ -75,7 +41,7 @@ import { nsend } from 'q';
   <!--        Champ Nom        -->
   <div class="field-container">
     <mat-form-field style="flex:1;">
-      <input matInput formControlName="nom" type="text" placeholder="Nom">
+      <input  autocomplete="off"  matInput formControlName="nom" type="text" placeholder="Nom">
     </mat-form-field>
     <lib-portal-form-error-icon [control]="signupForm.controls['nom']"></lib-portal-form-error-icon>
   </div>
@@ -83,7 +49,7 @@ import { nsend } from 'q';
   <!--        Champ Email        -->
   <div class="field-container">
     <mat-form-field style="flex:1;">
-      <input matInput formControlName="email" type="email" placeholder="E-mail">
+      <input  autocomplete="off"  matInput formControlName="email" type="email" placeholder="E-mail">
     </mat-form-field>
     <lib-portal-form-error-icon [control]="signupForm.controls['email']"></lib-portal-form-error-icon>
   </div>
@@ -96,14 +62,14 @@ import { nsend } from 'q';
     <div style="display:flex;flex-direction:row;">
       <div style="flex:1;" class="field-container">
         <mat-form-field style="flex:1;">
-        <input matInput  formControlName="password" type="password" placeholder="Mot de passe" >
+        <input  autocomplete="off"  matInput  formControlName="password" type="password" placeholder="Mot de passe" >
         </mat-form-field>
         <lib-portal-form-error-icon [control]="signupForm.controls['password']"></lib-portal-form-error-icon>
       </div>
 
       <div  style="flex:1;"  class="field-container">
         <mat-form-field style="flex:1;">
-        <input matInput  formControlName="confirmPassword" type="password" placeholder="Confirmation mot de passe" >
+        <input  autocomplete="off"  matInput  formControlName="confirmPassword" type="password" placeholder="Confirmation mot de passe" >
         </mat-form-field>
         <lib-portal-form-error-icon [control]="signupForm.controls['confirmPassword']"></lib-portal-form-error-icon>
       </div>
@@ -204,10 +170,13 @@ export class AccountSignupComponent implements OnInit {
   signupForm: FormGroup;
   passwordStrength: PasswordCheckStrength;
   passwordStrengthMessage = 'Mot de passe trop court';
-  errorMessage : string = null;
+  errorMessages: string[] = [];
+  successMessages: string[] = [];
   waiting = false;
-  error =false;
+  error = false;
+  success = false;
   constructor(
+    private accountService: AccountService,
     private fb: FormBuilder,
     private passwordService: PasswordService
   ) {
@@ -219,7 +188,7 @@ export class AccountSignupComponent implements OnInit {
       prenom: ['', [Validators.required, Validators.minLength(2)]]
     });
   }
-  ngOnInit() {}
+  ngOnInit() { }
 
   private validateStrength(fieldControl: FormControl) {
     const value = fieldControl.value;
@@ -258,19 +227,35 @@ export class AccountSignupComponent implements OnInit {
       return fieldControl.value === this.signupForm.get('password').value
         ? null
         : {
-            notEqual: true
-          };
+          notEqual: true
+        };
     } else {
       return null;
     }
   }
-  onActionClick() {
+  async onActionClick() {
     this.error = false;
     this.waiting = true;
-    setTimeout(() => {
-      this.waiting = false;
-      this.error = true;
-      this.errorMessage ='Test erreur';
-    }, 3000);
+    setTimeout(async () => {
+      const nom: string = this.signupForm.controls['nom'].value;
+      const prenom: string = this.signupForm.controls['prenom'].value;
+      const email: string = this.signupForm.controls['email'].value;
+      const hash = this.passwordService.hashPassword(this.signupForm.controls['password'].value);
+      try {
+        await this.accountService.signup(nom,prenom,email,hash);
+        this.waiting = false;
+        this.error = false;
+        this.success = true;
+        this.successMessages = ['Votre compte as bien été créer','Un e-mail d\'activation de votre compte viens de vous être envoyé'];
+        
+      } catch (e) {
+        this.waiting = false;
+        this.error = true;
+        this.success = false;
+        this.errorMessages = [e]
+      }
+
+     
+    }, 1000);
   }
 }

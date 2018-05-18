@@ -21,7 +21,7 @@ import { AccountService } from '../../../services/account.service';
   <!--        Champ Email        -->
   <div class="field-container">
     <mat-form-field style="flex:1;">
-      <input matInput formControlName="email" type="email" placeholder="E-mail">
+      <input autocomplete="on" matInput formControlName="email" type="email" placeholder="E-mail">
     </mat-form-field>
     <lib-portal-form-error-icon [control]="signinForm.controls['email']"></lib-portal-form-error-icon>
   </div>

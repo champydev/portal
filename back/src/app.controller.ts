@@ -7,6 +7,6 @@ export class AppController {
 
   @Get()
   root(@Res() res) {
-    res.sendFile("index.html");
+    res.sendFile("index.html", { root: 'C:\\Dev\\Source\\Perso\\portal\\front\\dist\\ceuillette' });
   }
 }

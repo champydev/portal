@@ -14,12 +14,7 @@ import { Router } from '@angular/router';
 
 
 
-  <div class="link-container">
-    <a href="/#/account/signin">Se connecter</a>
-    <div style="flex:1;"></div>
-    <a href="/#/account/signup">Créer un compte</a>
-  </div>
-
+  
 
 </lib-portal-card>
   `,

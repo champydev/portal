@@ -12,7 +12,35 @@ export class AccountService {
     constructor(private http: HttpClient) {
 
     }
-
+    public async activate(token : string)
+    {
+        return new Promise<void>((resolve, reject) => {            
+            this.http.post(this._baseApiUrl + 'api/account/activate', {
+                token:token,               
+            }).subscribe((data) => {  
+                this._token = (<any>data).token;
+                this.startAutoRefreshToken();                        
+                resolve();
+            }, (error) => {
+                reject(error);
+            });
+        });
+    }
+    public async signup(nom,prenom,email,hash)
+    {
+        return new Promise<void>((resolve, reject) => {            
+            this.http.post(this._baseApiUrl + 'api/account/signup', {
+                nom:nom,
+                prenom:prenom,
+                hash:hash,
+                email:email
+            }).subscribe((data) => {                
+                resolve();
+            }, (error) => {
+                reject(error);
+            });
+        });
+    }
     public async forgot(email : string)
     {
         return new Promise<void>((resolve, reject) => {            
@@ -29,6 +57,19 @@ export class AccountService {
         return this._token;
     }
 
+    public async updatePassword(hash : string,token : string) : Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+           
+            this.http.post(this._baseApiUrl + 'api/account/password', {
+                hash:hash,
+                token:token
+            }).subscribe((data) => {                
+                resolve();
+            }, (error) => {
+                reject(error);
+            });
+        });
+    }
     public async refreshToken(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (this._token == null) {

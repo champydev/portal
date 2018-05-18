@@ -28,12 +28,15 @@ import { PortalService } from './services/portal.service';
 import { PasswordService } from './services/password.service';
 import {AccountService} from './services/account.service';
 import {JwtGuard } from './guards/jwt.guard';
+import {AccountPasswordComponent} from './components/account/password/account.password.component';
 const appRoutes: Routes = [
+  { path: 'account/password', component: AccountPasswordComponent },
   { path: 'account/signin', component: AccountSigninComponent },
   { path: 'account/signout', component: AccountSignoutComponent,canActivate:[JwtGuard] },
   { path: 'account/forgot', component: AccountForgotComponent },
   { path: 'account/signup', component: AccountSignupComponent },
   { path: 'account/activate', component: AccountActivateComponent },
+ 
   {
     path: '',
     redirectTo: '/home',
@@ -66,6 +69,7 @@ const appRoutes: Routes = [
     AccountForgotComponent,
     FormErrorIconComponent,
     AccountActivateComponent,
+    AccountPasswordComponent,
     CardComponent
   ],
   exports: [
@@ -78,6 +82,7 @@ const appRoutes: Routes = [
     AccountForgotComponent,
     AsyncResultComponent,
     FormErrorIconComponent,
+    AccountPasswordComponent,
     AccountActivateComponent,
     CardComponent
     

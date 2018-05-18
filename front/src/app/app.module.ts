@@ -2,24 +2,23 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './components/app/app.component';
-import {PortalModule} from 'portal';
-import {PortalComponent} from 'portal';
+import { PortalModule } from 'portal';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import {JwtGuard } from 'portal';
+import { JwtGuard } from 'portal';
 const appRoutes: Routes = [
-  { path: 'home', component: HomeComponent,canActivate:[JwtGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [JwtGuard] },
 ];
 @NgModule({
-  declarations: [    
+  declarations: [
     AppComponent, HomeComponent
   ],
   imports: [
-    BrowserModule,  
+    BrowserModule,
     PortalModule,
-    RouterModule.forRoot(appRoutes,{
-      useHash:true
+    RouterModule.forRoot(appRoutes, {
+      useHash: true
     }),
     CommonModule,
     BrowserAnimationsModule,
@@ -27,4 +26,7 @@ const appRoutes: Routes = [
   providers: [],
   bootstrap: [AppComponent]
 })
+/**
+ * Module principal.
+ */
 export class AppModule { }
